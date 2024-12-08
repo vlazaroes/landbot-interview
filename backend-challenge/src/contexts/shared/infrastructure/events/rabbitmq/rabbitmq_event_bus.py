@@ -17,7 +17,7 @@ class RabbitMQEventBus(EventBus):
         for domain_event in domain_events:
             self.connection.channel.basic_publish(
                 exchange=self.exchange_name,
-                routing_key=domain_event.event_name(),
-                body=domain_event.to_json(),
-                properties=BasicProperties(message_id=domain_event.event_id()),
+                routing_key=domain_event.get_event_name(),
+                body=domain_event.serialize(),
+                properties=BasicProperties(message_id=domain_event.get_event_id()),
             )
