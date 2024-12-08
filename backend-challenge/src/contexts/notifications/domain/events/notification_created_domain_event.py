@@ -1,8 +1,6 @@
 import json
 from abc import ABC
 
-from pydantic import BaseModel
-
 from contexts.notifications.domain.notification_description import (
     NotificationDescription,
 )
@@ -11,7 +9,7 @@ from contexts.notifications.domain.notification_topic import NotificationTopic
 from contexts.shared.domain.events.domain_event import DomainEvent
 
 
-class NotificationCreatedDomainEvent(DomainEvent, BaseModel, ABC):
+class NotificationCreatedDomainEvent(DomainEvent, ABC):
     id: NotificationId
     topic: NotificationTopic
     description: NotificationDescription
@@ -20,9 +18,9 @@ class NotificationCreatedDomainEvent(DomainEvent, BaseModel, ABC):
         return json.dumps(
             {
                 "data": {
-                    "id": str(self.event_id.value),
+                    "id": self.get_event_id(),
                     "type": self.get_event_name(),
-                    "ocurred_on": str(self.ocurred_on),
+                    "ocurred_on": self.get_ocurred_on(),
                     "attributes": {
                         "id": str(self.id.value),
                         "topic": self.topic.value,
