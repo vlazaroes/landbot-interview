@@ -27,7 +27,7 @@ class Notification(AggregateRoot):
         notification.record_created_domain_event()
         return notification
 
-    def record_created_domain_event(self):
+    def record_created_domain_event(self) -> None:
         CREATED_DOMAIN_EVENTS = {
             "SLACK": NotificationSlackCreatedDomainEvent,
             "EMAIL": NotificationEmailCreatedDomainEvent,
