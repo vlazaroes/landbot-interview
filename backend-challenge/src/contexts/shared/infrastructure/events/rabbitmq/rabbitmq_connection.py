@@ -11,10 +11,12 @@ class RabbitMQConnection:
         self.channel = self.__connection.channel()
 
     def use_exchange(self, name: str) -> None:
-        self.channel.exchange_declare(exchange=name, exchange_type="topic")
+        self.channel.exchange_declare(
+            exchange=name, exchange_type="topic", durable=True
+        )
 
     def use_queue(self, name: str, exchange_name: str, binding_key: str) -> None:
-        self.channel.queue_declare(queue=name)
+        self.channel.queue_declare(queue=name, durable=True)
         self.channel.queue_bind(
             queue=name, exchange=exchange_name, routing_key=binding_key
         )

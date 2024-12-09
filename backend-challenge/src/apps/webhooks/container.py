@@ -24,7 +24,7 @@ class Container(containers.DeclarativeContainer):
     rabbitmq_event_bus = providers.Factory(
         RabbitMQEventBus,
         connection=rabbitmq_connection,
-        exchange_name="webhooks",
+        exchange_name="landbot.webhooks",
     )
     notification_creator = providers.Factory(
         NotificationCreator,

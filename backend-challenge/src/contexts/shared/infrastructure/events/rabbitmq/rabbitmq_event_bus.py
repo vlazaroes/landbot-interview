@@ -19,5 +19,9 @@ class RabbitMQEventBus(EventBus):
                 exchange=self.exchange_name,
                 routing_key=domain_event.get_event_name(),
                 body=domain_event.serialize(),
-                properties=BasicProperties(message_id=domain_event.get_event_id()),
+                properties=BasicProperties(
+                    content_type="application/json",
+                    content_encoding="UTF-8",
+                    message_id=domain_event.get_event_id(),
+                ),
             )
