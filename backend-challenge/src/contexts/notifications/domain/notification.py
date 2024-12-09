@@ -1,5 +1,3 @@
-from typing import Any, Optional
-
 from contexts.notifications.domain.events.notification_email_created_domain_event import (
     NotificationEmailCreatedDomainEvent,
 )
@@ -26,20 +24,17 @@ class Notification(AggregateRoot):
         description: NotificationDescription,
     ) -> "Notification":
         notification = Notification(id=id, topic=topic, description=description)
-        created_domain_event_class = Notification.__get_created_domain_event(
-            topic=topic
-        )
-        if not created_domain_event_class:
-            raise ValueError("The topic value is invalid")
-        notification.record_domain_event(
-            created_domain_event_class(topic=topic, description=description)
-        )
+        notification.record_created_domain_event()
         return notification
 
-    @staticmethod
-    def __get_created_domain_event(topic: NotificationTopic) -> Optional[Any]:
+    def record_created_domain_event(self):
         CREATED_DOMAIN_EVENTS = {
             "SLACK": NotificationSlackCreatedDomainEvent,
             "EMAIL": NotificationEmailCreatedDomainEvent,
         }
-        return CREATED_DOMAIN_EVENTS.get(topic.value.upper(), None)
+        event_class = CREATED_DOMAIN_EVENTS.get(self.topic.value.upper(), None)
+        if not event_class:
+            raise ValueError("The topic value is invalid")
+        self.record_domain_event(
+            event_class(id=self.id, topic=self.topic, description=self.description)
+        )
