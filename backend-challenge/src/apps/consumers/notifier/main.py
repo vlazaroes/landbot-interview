@@ -1,5 +1,7 @@
 import json
+import logging
 import os
+import sys
 from typing import Any
 
 from dependency_injector.wiring import Provide, inject
@@ -19,15 +21,25 @@ def main(
     rabbitmq_consumer: RabbitMQConsumer = Provide[Container.rabbitmq_consumer],
     notification_sender: NotificationSender = Provide[Container.notification_sender],
 ) -> None:
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
+
     def consumer(
         channel: Any, method: Any, properties: BasicProperties, body: bytes
     ) -> None:
-        event = json.loads(body)
-        notification_sender.run(
-            id=event["data"]["attributes"]["id"],
-            topic=event["data"]["attributes"]["topic"],
-            description=event["data"]["attributes"]["description"],
-        )
+        try:
+            event = json.loads(body)
+            notification_sender.run(
+                id=event["data"]["attributes"]["id"],
+                topic=event["data"]["attributes"]["topic"],
+                description=event["data"]["attributes"]["description"],
+            )
+            logging.info(
+                f"{os.environ.get("RABBITMQ_BINDING_KEY")} - \"{event["data"]["attributes"]["id"]}\""
+            )
+        except Exception:
+            logging.error(
+                f"{os.environ.get("RABBITMQ_BINDING_KEY")} - \"{event["data"]["attributes"]["id"]}\""
+            )
 
     rabbitmq_consumer.consume_domain_events(
         queue_name=os.environ.get("RABBITMQ_QUEUE"),
@@ -37,6 +49,12 @@ def main(
 
 
 if __name__ == "__main__":
-    container = Container()
-    container.wire(modules=[__name__])
-    main()
+    try:
+        container = Container()
+        container.wire(modules=[__name__])
+        main()
+    except KeyboardInterrupt:
+        try:
+            sys.exit(0)
+        except SystemExit:
+            os._exit(0)
