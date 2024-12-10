@@ -1,4 +1,5 @@
 import json
+import os
 from typing import Any
 
 from dependency_injector.wiring import Provide, inject
@@ -17,20 +18,20 @@ from contexts.shared.infrastructure.events.rabbitmq.rabbitmq_consumer import (
 def main(
     rabbitmq_consumer: RabbitMQConsumer = Provide[Container.rabbitmq_consumer],
     notification_sender: NotificationSender = Provide[Container.notification_sender],
-):
+) -> None:
     def consumer(
         channel: Any, method: Any, properties: BasicProperties, body: bytes
     ) -> None:
         event = json.loads(body)
         notification_sender.run(
-            event["data"]["attributes"]["id"],
-            event["data"]["attributes"]["topic"],
-            event["data"]["attributes"]["description"],
+            id=event["data"]["attributes"]["id"],
+            topic=event["data"]["attributes"]["topic"],
+            description=event["data"]["attributes"]["description"],
         )
 
     rabbitmq_consumer.consume_domain_events(
-        "webhooks.notifications",
-        "landbot.event.notification.slack.created",
+        queue_name=os.environ.get("RABBITMQ_QUEUE"),
+        binding_key=os.environ.get("RABBITMQ_BINDING_KEY"),
         callback=consumer,
     )
 

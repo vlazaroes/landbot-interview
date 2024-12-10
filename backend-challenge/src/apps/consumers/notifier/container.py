@@ -1,8 +1,11 @@
+import os
+
 from dependency_injector import containers, providers
 
 from contexts.notifications.application.send.notification_sender import (
     NotificationSender,
 )
+from contexts.notifications.infrastructure.notifier.email_notifier import EmailNotifier
 from contexts.notifications.infrastructure.notifier.slack_notifier import SlackNotifier
 from contexts.shared.infrastructure.events.rabbitmq.rabbitmq_connection import (
     RabbitMQConnection,
@@ -12,24 +15,42 @@ from contexts.shared.infrastructure.events.rabbitmq.rabbitmq_consumer import (
 )
 
 
-class Container(containers.DeclarativeContainer):
-    config = providers.Configuration()
+def get_notifier_implementation(topic: str):
+    match topic.upper():
+        case "SLACK":
+            return providers.Factory(
+                SlackNotifier,
+                bot_token=os.environ.get("SLACK_BOT_TOKEN"),
+                channel_id=os.environ.get("SLACK_CHANNEL_ID"),
+            )
+        case "EMAIL":
+            return providers.Factory(
+                EmailNotifier,
+                hostname=os.environ.get("SMTP_HOSTNAME"),
+                port=os.environ.get("SMTP_PORT"),
+                username=os.environ.get("SMTP_USERNAME"),
+                password=os.environ.get("SMTP_PASSWORD"),
+                sender=os.environ.get("SMTP_SENDER"),
+                recipient=os.environ.get("SMTP_RECIPIENT"),
+            )
+        case _:
+            raise ValueError("The topic value is invalid")
 
+
+class Container(containers.DeclarativeContainer):
     rabbitmq_connection = providers.Factory(
         RabbitMQConnection,
-        hostname="localhost",
-        username="landbot",
-        password="landbot",
+        hostname=os.environ.get("RABBITMQ_HOSTNAME"),
+        username=os.environ.get("RABBITMQ_USERNAME"),
+        password=os.environ.get("RABBITMQ_PASSWORD"),
     )
     rabbitmq_consumer = providers.Factory(
         RabbitMQConsumer,
         connection=rabbitmq_connection,
-        exchange_name="landbot.webhooks",
+        exchange_name=os.environ.get("RABBITMQ_EXCHANGE"),
     )
-    slack_notifier = providers.Factory(
-        SlackNotifier,
-    )
+    notifier = get_notifier_implementation(os.environ.get("CONSUMER_TOPIC"))
     notification_sender = providers.Factory(
         NotificationSender,
-        notifier=slack_notifier,
+        notifier=notifier,
     )
