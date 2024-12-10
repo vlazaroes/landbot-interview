@@ -15,15 +15,15 @@ from contexts.shared.infrastructure.events.rabbitmq.rabbitmq_consumer import (
 )
 
 
-def get_notifier_implementation(topic: str):
-    match topic.upper():
-        case "SLACK":
+def get_notifier_implementation(queue: str):
+    match queue:
+        case "webhooks.notifications.slack":
             return providers.Factory(
                 SlackNotifier,
                 bot_token=os.environ.get("SLACK_BOT_TOKEN"),
                 channel_id=os.environ.get("SLACK_CHANNEL_ID"),
             )
-        case "EMAIL":
+        case "webhooks.notifications.email":
             return providers.Factory(
                 EmailNotifier,
                 hostname=os.environ.get("SMTP_HOSTNAME"),
@@ -49,7 +49,7 @@ class Container(containers.DeclarativeContainer):
         connection=rabbitmq_connection,
         exchange_name=os.environ.get("RABBITMQ_EXCHANGE"),
     )
-    notifier = get_notifier_implementation(os.environ.get("CONSUMER_TOPIC"))
+    notifier = get_notifier_implementation(os.environ.get("RABBITMQ_QUEUE"))
     notification_sender = providers.Factory(
         NotificationSender,
         notifier=notifier,
