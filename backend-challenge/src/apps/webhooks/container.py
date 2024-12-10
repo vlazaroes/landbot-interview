@@ -1,3 +1,5 @@
+import os
+
 from dependency_injector import containers, providers
 
 from contexts.notifications.application.create.notification_creator import (
@@ -13,18 +15,17 @@ from contexts.shared.infrastructure.events.rabbitmq.rabbitmq_event_bus import (
 
 class Container(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(modules=[".routers.notifications"])
-    config = providers.Configuration()
 
     rabbitmq_connection = providers.Factory(
         RabbitMQConnection,
-        hostname="localhost",
-        username="landbot",
-        password="landbot",
+        hostname=os.environ.get("RABBITMQ_HOSTNAME"),
+        username=os.environ.get("RABBITMQ_USERNAME"),
+        password=os.environ.get("RABBITMQ_PASSWORD"),
     )
     rabbitmq_event_bus = providers.Factory(
         RabbitMQEventBus,
         connection=rabbitmq_connection,
-        exchange_name="landbot.webhooks",
+        exchange_name=os.environ.get("RABBITMQ_EXCHANGE"),
     )
     notification_creator = providers.Factory(
         NotificationCreator,
