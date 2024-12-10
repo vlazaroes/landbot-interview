@@ -1,5 +1,5 @@
 from dependency_injector.wiring import Provide, inject
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, HTTPException, status
 
 from apps.webhooks.container import Container
 from apps.webhooks.schemas.notification import Notification
@@ -18,5 +18,14 @@ def send_notification(
         Provide[Container.notification_creator]
     ),
 ) -> None:
-    notification_creator.run(notification.topic, notification.description)
-    return None
+    try:
+        notification_creator.run(notification.topic, notification.description)
+        return None
+    except ValueError as error:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail=str(error)
+        ) from error
+    except Exception as error:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(error)
+        ) from error
