@@ -22,6 +22,7 @@ def main(
     notification_sender: NotificationSender = Provide[Container.notification_sender],
 ) -> None:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
+    logging.info("Started consumer process.")
 
     def consumer(
         channel: Any, method: Any, properties: BasicProperties, body: bytes
@@ -41,6 +42,7 @@ def main(
                 f"{os.environ.get("RABBITMQ_BINDING_KEY")} - \"{event["data"]["attributes"]["id"]}\""
             )
 
+    logging.info("Waiting for messages.")
     rabbitmq_consumer.consume_domain_events(
         queue_name=os.environ.get("RABBITMQ_QUEUE"),
         binding_key=os.environ.get("RABBITMQ_BINDING_KEY"),
