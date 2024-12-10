@@ -1,0 +1,85 @@
+---
+services:
+  webhooks:
+    image: landbot/webhooks:latest
+    build:
+      context: .
+      dockerfile: src/apps/webhooks/build/Dockerfile
+    environment:
+      RABBITMQ_HOSTNAME: "rabbitmq"
+      RABBITMQ_USERNAME: "landbot"
+      RABBITMQ_PASSWORD: "landbot"
+      RABBITMQ_EXCHANGE: "landbot.webhooks"
+    ports:
+      - 8000:8000
+    depends_on:
+      - rabbitmq
+    networks:
+      - rabbitmq_webhooks
+
+  slack:
+    image: landbot/consumers/notifier:latest
+    build:
+      context: .
+      dockerfile: src/apps/consumers/notifier/build/Dockerfile
+    environment:
+      RABBITMQ_HOSTNAME: "rabbitmq"
+      RABBITMQ_USERNAME: "landbot"
+      RABBITMQ_PASSWORD: "landbot"
+      RABBITMQ_EXCHANGE: "landbot.webhooks"
+      RABBITMQ_QUEUE: "webhooks.notifications.slack"
+      RABBITMQ_BINDING_KEY: "landbot.event.notification.slack.created"
+      SLACK_BOT_TOKEN: ""
+      SLACK_CHANNEL_ID: ""
+    depends_on:
+      - rabbitmq
+    networks:
+      - rabbitmq_slack
+
+  email:
+    image: landbot/consumers/notifier:latest
+    build:
+      context: .
+      dockerfile: src/apps/consumers/notifier/build/Dockerfile
+    environment:
+      RABBITMQ_HOSTNAME: "rabbitmq"
+      RABBITMQ_USERNAME: "landbot"
+      RABBITMQ_PASSWORD: "landbot"
+      RABBITMQ_EXCHANGE: "landbot.webhooks"
+      RABBITMQ_QUEUE: "webhooks.notifications.email"
+      RABBITMQ_BINDING_KEY: "landbot.event.notification.email.created"
+      SMTP_HOSTNAME: ""
+      SMTP_PORT: 465
+      SMTP_USERNAME: ""
+      SMTP_PASSWORD: ""
+      SMTP_SENDER: ""
+      SMTP_RECIPIENT: ""
+    depends_on:
+      - rabbitmq
+    networks:
+      - rabbitmq_email
+
+  rabbitmq:
+    image: rabbitmq:4.0.4-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: "landbot"
+      RABBITMQ_DEFAULT_PASS: "landbot"
+    ports:
+      - 15672:15672
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - rabbitmq_webhooks
+      - rabbitmq_email
+      - rabbitmq_slack
+
+volumes:
+  rabbitmq_data:
+
+networks:
+  rabbitmq_webhooks:
+    driver: bridge
+  rabbitmq_email:
+    driver: bridge
+  rabbitmq_slack:
+    driver: bridge
