@@ -2,7 +2,7 @@ from typing import Any, Callable
 
 from pika import BasicProperties
 
-from contexts.shared.infrastructure.events.rabbitmq.rabbitmq_connection import (
+from src.contexts.shared.infrastructure.events.rabbitmq.rabbitmq_connection import (
     RabbitMQConnection,
 )
 

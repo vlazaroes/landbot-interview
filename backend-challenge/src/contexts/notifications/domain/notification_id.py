@@ -1,4 +1,4 @@
-from contexts.shared.domain.value_objects.uuid import UUID
+from src.contexts.shared.domain.value_objects.uuid import UUID
 
 
 class NotificationId(UUID):

@@ -1,12 +1,12 @@
 import json
 from abc import ABC
 
-from contexts.notifications.domain.notification_description import (
+from src.contexts.notifications.domain.notification_description import (
     NotificationDescription,
 )
-from contexts.notifications.domain.notification_id import NotificationId
-from contexts.notifications.domain.notification_topic import NotificationTopic
-from contexts.shared.domain.events.domain_event import DomainEvent
+from src.contexts.notifications.domain.notification_id import NotificationId
+from src.contexts.notifications.domain.notification_topic import NotificationTopic
+from src.contexts.shared.domain.events.domain_event import DomainEvent
 
 
 class NotificationCreatedDomainEvent(DomainEvent, ABC):

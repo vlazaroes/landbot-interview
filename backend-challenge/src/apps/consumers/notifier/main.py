@@ -7,11 +7,11 @@ from typing import Any
 from dependency_injector.wiring import Provide, inject
 from pika import BasicProperties
 
-from apps.consumers.notifier.container import Container
-from contexts.notifications.application.send.notification_sender import (
+from src.apps.consumers.notifier.container import Container
+from src.contexts.notifications.application.send.notification_sender import (
     NotificationSender,
 )
-from contexts.shared.infrastructure.events.rabbitmq.rabbitmq_consumer import (
+from src.contexts.shared.infrastructure.events.rabbitmq.rabbitmq_consumer import (
     RabbitMQConsumer,
 )
 
@@ -44,8 +44,8 @@ def main(
 
     logging.info("Waiting for messages.")
     rabbitmq_consumer.consume_domain_events(
-        queue_name=os.environ.get("RABBITMQ_QUEUE"),
-        binding_key=os.environ.get("RABBITMQ_BINDING_KEY"),
+        queue_name=os.environ.get("RABBITMQ_QUEUE", ""),
+        binding_key=os.environ.get("RABBITMQ_BINDING_KEY", ""),
         callback=consumer,
     )
 

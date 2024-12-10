@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from contexts.notifications.domain.notification import Notification
+from src.contexts.notifications.domain.notification import Notification
 
 
 class Notifier(ABC):

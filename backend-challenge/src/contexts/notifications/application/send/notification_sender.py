@@ -1,10 +1,12 @@
-from contexts.notifications.domain.notification import Notification
-from contexts.notifications.domain.notification_description import (
+import uuid
+
+from src.contexts.notifications.domain.notification import Notification
+from src.contexts.notifications.domain.notification_description import (
     NotificationDescription,
 )
-from contexts.notifications.domain.notification_id import NotificationId
-from contexts.notifications.domain.notification_topic import NotificationTopic
-from contexts.notifications.domain.notifier import Notifier
+from src.contexts.notifications.domain.notification_id import NotificationId
+from src.contexts.notifications.domain.notification_topic import NotificationTopic
+from src.contexts.notifications.domain.notifier import Notifier
 
 
 class NotificationSender:
@@ -13,7 +15,7 @@ class NotificationSender:
 
     def run(self, id: str, topic: str, description: str) -> None:
         notification = Notification(
-            id=NotificationId(value=id),
+            id=NotificationId(value=uuid.UUID(id)),
             topic=NotificationTopic(value=topic),
             description=NotificationDescription(value=description),
         )

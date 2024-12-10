@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 from pydantic import BaseModel, Field
 
-from contexts.shared.domain.value_objects.uuid import UUID
+from src.contexts.shared.domain.value_objects.uuid import UUID
 
 
 class DomainEvent(BaseModel, ABC):

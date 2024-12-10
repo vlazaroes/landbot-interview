@@ -1,12 +1,12 @@
 import uuid
 
-from contexts.notifications.domain.notification import Notification
-from contexts.notifications.domain.notification_description import (
+from src.contexts.notifications.domain.notification import Notification
+from src.contexts.notifications.domain.notification_description import (
     NotificationDescription,
 )
-from contexts.notifications.domain.notification_id import NotificationId
-from contexts.notifications.domain.notification_topic import NotificationTopic
-from contexts.shared.domain.events.event_bus import EventBus
+from src.contexts.notifications.domain.notification_id import NotificationId
+from src.contexts.notifications.domain.notification_topic import NotificationTopic
+from src.contexts.shared.domain.events.event_bus import EventBus
 
 
 class NotificationCreator:

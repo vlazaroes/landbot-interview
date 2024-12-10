@@ -14,8 +14,6 @@ COPY src/contexts/shared src/contexts/shared
 
 RUN pip install -r src/apps/webhooks/requirements/base.txt
 
-WORKDIR /usr/src/app/src
+ENV PYTHONPATH=/usr/src/app:$PYTHONPATH
 
-ENV PYTHONPATH=/usr/src/app/src:$PYTHONPATH
-
-CMD ["uvicorn", "apps.webhooks.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "src.apps.webhooks.main:app", "--host", "0.0.0.0", "--port", "8000"]

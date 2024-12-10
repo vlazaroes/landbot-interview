@@ -14,8 +14,6 @@ COPY src/contexts/shared src/contexts/shared
 
 RUN pip install -r src/apps/consumers/notifier/requirements/base.txt
 
-WORKDIR /usr/src/app/src
+ENV PYTHONPATH=/usr/src/app:$PYTHONPATH
 
-ENV PYTHONPATH=/usr/src/app/src:$PYTHONPATH
-
-CMD ["python", "apps/consumers/notifier/main.py"]
+CMD ["python", "src/apps/consumers/notifier/main.py"]

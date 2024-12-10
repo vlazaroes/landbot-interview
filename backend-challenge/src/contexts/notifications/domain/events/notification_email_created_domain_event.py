@@ -1,4 +1,4 @@
-from contexts.notifications.domain.events.notification_created_domain_event import (
+from src.contexts.notifications.domain.events.notification_created_domain_event import (
     NotificationCreatedDomainEvent,
 )
 

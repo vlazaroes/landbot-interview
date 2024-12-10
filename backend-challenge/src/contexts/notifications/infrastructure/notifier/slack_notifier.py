@@ -1,7 +1,7 @@
 from slack_sdk import WebClient
 
-from contexts.notifications.domain.notification import Notification
-from contexts.notifications.domain.notifier import Notifier
+from src.contexts.notifications.domain.notification import Notification
+from src.contexts.notifications.domain.notifier import Notifier
 
 
 class SlackNotifier(Notifier):

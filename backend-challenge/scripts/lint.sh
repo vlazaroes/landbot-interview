@@ -5,3 +5,4 @@ set -x
 
 ruff check src
 ruff format src --check
+mypy src

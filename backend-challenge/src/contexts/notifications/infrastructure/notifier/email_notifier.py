@@ -2,8 +2,8 @@ import smtplib
 import ssl
 from email.message import EmailMessage
 
-from contexts.notifications.domain.notification import Notification
-from contexts.notifications.domain.notifier import Notifier
+from src.contexts.notifications.domain.notification import Notification
+from src.contexts.notifications.domain.notifier import Notifier
 
 
 class EmailNotifier(Notifier):

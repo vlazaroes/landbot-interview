@@ -1,8 +1,8 @@
 from pika import BasicProperties
 
-from contexts.shared.domain.events.domain_event import DomainEvent
-from contexts.shared.domain.events.event_bus import EventBus
-from contexts.shared.infrastructure.events.rabbitmq.rabbitmq_connection import (
+from src.contexts.shared.domain.events.domain_event import DomainEvent
+from src.contexts.shared.domain.events.event_bus import EventBus
+from src.contexts.shared.infrastructure.events.rabbitmq.rabbitmq_connection import (
     RabbitMQConnection,
 )
 

@@ -2,13 +2,13 @@ import os
 
 from dependency_injector import containers, providers
 
-from contexts.notifications.application.create.notification_creator import (
+from src.contexts.notifications.application.create.notification_creator import (
     NotificationCreator,
 )
-from contexts.shared.infrastructure.events.rabbitmq.rabbitmq_connection import (
+from src.contexts.shared.infrastructure.events.rabbitmq.rabbitmq_connection import (
     RabbitMQConnection,
 )
-from contexts.shared.infrastructure.events.rabbitmq.rabbitmq_event_bus import (
+from src.contexts.shared.infrastructure.events.rabbitmq.rabbitmq_event_bus import (
     RabbitMQEventBus,
 )
 

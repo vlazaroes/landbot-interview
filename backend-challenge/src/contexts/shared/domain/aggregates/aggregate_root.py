@@ -2,7 +2,7 @@ from abc import ABC
 
 from pydantic import BaseModel, Field
 
-from contexts.shared.domain.events.domain_event import DomainEvent
+from src.contexts.shared.domain.events.domain_event import DomainEvent
 
 
 class AggregateRoot(BaseModel, ABC):
