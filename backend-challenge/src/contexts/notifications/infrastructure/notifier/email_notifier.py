@@ -28,7 +28,7 @@ class EmailNotifier(Notifier):
         with smtplib.SMTP_SSL(
             host=self.__hostname, port=self.__port, context=context
         ) as smtp:
-            email = self.__create_email(notification=notification)
+            email = self.__create_email(notification)
             smtp.login(user=self.__username, password=self.__password)
             smtp.sendmail(
                 from_addr=self.__sender,

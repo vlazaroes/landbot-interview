@@ -11,7 +11,7 @@ from contexts.shared.domain.events.event_bus import EventBus
 
 class NotificationCreator:
     def __init__(self, event_bus: EventBus) -> None:
-        self.event_bus = event_bus
+        self.__event_bus = event_bus
 
     def run(self, topic: str, description: str) -> None:
         notification = Notification.create(
@@ -19,4 +19,4 @@ class NotificationCreator:
             topic=NotificationTopic(value=topic),
             description=NotificationDescription(value=description),
         )
-        self.event_bus.publish_domain_events(notification.pull_domain_events())
+        self.__event_bus.publish_domain_events(notification.pull_domain_events())

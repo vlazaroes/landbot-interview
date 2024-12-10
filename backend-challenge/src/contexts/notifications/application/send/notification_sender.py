@@ -9,7 +9,7 @@ from contexts.notifications.domain.notifier import Notifier
 
 class NotificationSender:
     def __init__(self, notifier: Notifier) -> None:
-        self.notifier = notifier
+        self.__notifier = notifier
 
     def run(self, id: str, topic: str, description: str) -> None:
         notification = Notification(
@@ -17,4 +17,4 @@ class NotificationSender:
             topic=NotificationTopic(value=topic),
             description=NotificationDescription(value=description),
         )
-        self.notifier.notify(notification)
+        self.__notifier.notify(notification)
