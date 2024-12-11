@@ -23,7 +23,6 @@ class Notification(AggregateRoot):
         topic: NotificationTopic,
         description: NotificationDescription,
     ) -> "Notification":
-        print(type(id))
         notification = Notification(id=id, topic=topic, description=description)
         notification.record_created_domain_event()
         return notification
