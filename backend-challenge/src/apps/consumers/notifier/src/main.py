@@ -7,7 +7,7 @@ from typing import Any
 from dependency_injector.wiring import Provide, inject
 from pika import BasicProperties
 
-from src.apps.consumers.notifier.container import Container
+from src.apps.consumers.notifier.src.container import Container
 from src.contexts.notifications.application.send.notification_sender import (
     NotificationSender,
 )

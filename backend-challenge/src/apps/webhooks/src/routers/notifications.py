@@ -1,8 +1,8 @@
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from src.apps.webhooks.container import Container
-from src.apps.webhooks.schemas.notification import Notification
+from src.apps.webhooks.src.container import Container
+from src.apps.webhooks.src.schemas.notification import Notification
 from src.contexts.notifications.application.create.notification_creator import (
     NotificationCreator,
 )

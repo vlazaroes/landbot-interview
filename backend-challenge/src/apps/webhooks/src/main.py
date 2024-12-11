@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-from src.apps.webhooks.container import Container
-from src.apps.webhooks.routers import notifications
+from src.apps.webhooks.src.container import Container
+from src.apps.webhooks.src.routers import notifications
 
 container = Container()
 

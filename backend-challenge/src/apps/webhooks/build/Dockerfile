@@ -16,4 +16,4 @@ RUN pip install -r src/apps/webhooks/requirements/base.txt
 
 ENV PYTHONPATH=/usr/src/app:$PYTHONPATH
 
-CMD ["uvicorn", "src.apps.webhooks.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "src.apps.webhooks.src.main:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -16,4 +16,4 @@ RUN pip install -r src/apps/consumers/notifier/requirements/base.txt
 
 ENV PYTHONPATH=/usr/src/app:$PYTHONPATH
 
-CMD ["python", "src/apps/consumers/notifier/main.py"]
+CMD ["python", "src/apps/consumers/notifier/src/main.py"]
